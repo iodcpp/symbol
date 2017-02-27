@@ -3,7 +3,7 @@ iod::symbol
 =================================
 
 This tiny library (45 lines) implements the basics of symbol based
-programming. Symbols is a new C++ paradigm that allow you to simply
+programming. Symbols are a new C++ paradigm that allow you to simply
 implement introspection, serialization, named parameters, and other
 things that are very hard / impossible to build in classic C++.
 
