@@ -2,18 +2,18 @@
 
 #define IOD_SYMBOL(NAME)                                                \
 namespace s {                                                           \
-  struct _##NAME##_t {                                                   \
-    inline constexpr bool operator==(_##NAME##_t) { return true; }           \
+  struct _##NAME##_t {                                                  \
+    inline constexpr bool operator==(_##NAME##_t) { return true; }      \
     template <typename T>                                               \
-    inline constexpr bool operator==(T) { return false; }                    \
+    inline constexpr bool operator==(T) { return false; }               \
   };                                                                    \
-  static constexpr _##NAME##_t _##NAME;                                             \
+  static constexpr _##NAME##_t _##NAME;                                 \
                                                                         \
   template <typename V>                                                 \
-  static decltype(auto) make_variable_reference(_##NAME##_t k, V&& v)       \
+  static decltype(auto) make_variable_reference(_##NAME##_t k, V&& v)   \
   {                                                                     \
     struct {                                                            \
-      typedef _##NAME##_t _iod_symbol_type;                                       \
+      typedef _##NAME##_t _iod_symbol_type;                             \
       typedef V _iod_value_type;                                        \
       V NAME;                                                           \
     } res{std::forward<V>(v)};                                          \
@@ -21,10 +21,10 @@ namespace s {                                                           \
     return res;                                                         \
   }                                                                     \
   template <typename V>                                                 \
-  static decltype(auto) make_variable(_##NAME##_t k, V v)       \
+  static decltype(auto) make_variable(_##NAME##_t k, V v)               \
   {                                                                     \
     struct {                                                            \
-      typedef _##NAME##_t _iod_symbol_type;                                       \
+      typedef _##NAME##_t _iod_symbol_type;                             \
       typedef V _iod_value_type;                                        \
       std::remove_const_t<std::remove_reference_t<V>> NAME;             \
     } res{std::forward<V>(v)};                                          \
