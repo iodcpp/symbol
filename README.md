@@ -17,14 +17,14 @@ And provides 4 operators :
 
 ```c++
 // Named Variable declaration.
-auto v = s::make_variable(s::_my_symbol, 42);
+auto v = iod::make_variable(s::_my_symbol, 42);
 assert(v.my_symbol == 42);
 
 // Introspection
-assert(!strcmp(s::symbol_string(v), "my_symbol"));
+assert(!strcmp(iod::symbol_string(v), "my_symbol"));
 
 // Member access.
-assert(s::symbol_member_access(v, s::_my_symbol) == 42);  
+assert(iod::symbol_member_access(v, s::_my_symbol) == 42);  
 
 // Method call
 struct {
@@ -32,5 +32,5 @@ struct {
   int x;
 } obj{40};
 
-assert(s::symbol_method_call(obj, s::_my_symbol, 2) == 42);
+assert(iod::symbol_method_call(obj, s::_my_symbol, 2) == 42);
 ```
