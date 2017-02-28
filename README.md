@@ -7,20 +7,21 @@ programming. Symbols are a new C++ paradigm that allow you to simply
 implement introspection, serialization, named parameters, and other
 things that are very hard / impossible to build in classic C++.
 
-A symbol is defined with:
+A symbol is defined with a macro function :
 
 ```c++
 IOD_SYMBOL(my_symbol)
+IOD_SYMBOL(my_symbol2)
 ``` 
 
-And provides 4 operators :
+And provides some operators :
 
 ```c++
 // Named Variable declaration.
 auto v = iod::make_variable(_my_symbol, 42);
 assert(v.my_symbol == 42);
 
-// Introspection
+// Symbol introspection
 assert(!strcmp(iod::symbol_string(v), "my_symbol"));
 
 // Member access.
@@ -33,4 +34,8 @@ struct {
 } obj{40};
 
 assert(iod::symbol_method_call(obj, _my_symbol, 2) == 42);
+
+// Introspection on objects.
+assert(iod::has_member(obj, _my_symbol))
+assert(!iod::has_member(obj, _my_symbol2))
 ```
