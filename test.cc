@@ -1,4 +1,4 @@
-#include "symbol.hh"
+#include <iod/symbol/symbol.hh>
 #include <cassert>
 #include <cstring>
 
