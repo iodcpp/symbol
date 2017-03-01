@@ -1,3 +1,5 @@
+#pragma once
+
 #include <utility>
 #include "ast.hh"
 
@@ -82,11 +84,11 @@ namespace iod
   template <typename S>
   auto symbol_string(symbol<S> v)
   {
-    return typename S::symbol_string();
+    return S::symbol_string();
   }
 
   template <typename V>
-  auto symbol_string(V v)
+  auto symbol_string(V v, typename V::_iod_symbol_type* = 0)
   {
     return V::_iod_symbol_type::symbol_string();
   }
