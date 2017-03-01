@@ -10,22 +10,24 @@ things that are very hard / impossible to build in classic C++.
 A symbol is defined with a macro function :
 
 ```c++
-IOD_SYMBOL(my_symbol)
-IOD_SYMBOL(my_symbol2)
+namespace s {
+  IOD_SYMBOL(my_symbol)
+  IOD_SYMBOL(my_symbol2)
+}
 ``` 
 
 And provides some operators :
 
 ```c++
 // Named Variable declaration.
-auto v = iod::make_variable(_my_symbol, 42);
+auto v = iod::make_variable(s::_my_symbol, 42);
 assert(v.my_symbol == 42);
 
 // Symbol introspection
 assert(!strcmp(iod::symbol_string(v), "my_symbol"));
 
 // Member access.
-assert(iod::symbol_member_access(v, _my_symbol) == 42);  
+assert(iod::symbol_member_access(v, s::_my_symbol) == 42);  
 
 // Method call
 struct {
@@ -33,9 +35,9 @@ struct {
   int x;
 } obj{40};
 
-assert(iod::symbol_method_call(obj, _my_symbol, 2) == 42);
+assert(iod::symbol_method_call(obj, s::_my_symbol, 2) == 42);
 
 // Introspection on objects.
-assert(iod::has_member(obj, _my_symbol))
-assert(!iod::has_member(obj, _my_symbol2))
+assert(iod::has_member(obj, s::_my_symbol))
+assert(!iod::has_member(obj, s::_my_symbol2))
 ```
