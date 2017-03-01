@@ -32,7 +32,7 @@ template <typename V>                                                   \
   template <typename T, typename... A>                                  \
   static inline decltype(auto) symbol_method_call(T&& o, A... args) { return o.NAME(args...); } \
   template <typename T, typename... A>                                  \
-  static inline decltype(auto) symbol_member_access(T&& o) { return o.NAME; } \
+  static inline auto& symbol_member_access(T&& o) { return o.NAME; } \
   template <typename T>                                                 \
   static constexpr auto has_member(T&& o) -> decltype(o.NAME, std::true_type{}) { return {}; } \
   static constexpr std::false_type has_member(...) { return {}; }              \
