@@ -1,7 +1,7 @@
 #pragma once
 
 #include <utility>
-#include "ast.hh"
+#include <iod/symbol/ast.hh>
 
 namespace iod
 {
@@ -49,13 +49,20 @@ static constexpr _##NAME##_t _##NAME;
 namespace iod
 {
 
+  template <typename S>
+  inline decltype(auto) make_variable(S s, char const v[])
+  {
+    typedef typename S::template variable_t<const char*> ret;
+    return ret{v};
+  }
+
   template <typename V, typename S>
   inline decltype(auto) make_variable(S s, V v)
   {
     typedef typename S::template variable_t<std::remove_const_t<std::remove_reference_t<V>>> ret;
     return ret{v};
   }
-
+  
   template <typename K, typename V>
   inline decltype(auto) make_variable_reference(K s, V&& v)
   {
