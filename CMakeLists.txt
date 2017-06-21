@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 
 project(iod_symbol)
 
-SET(CMAKE_CXX_STANDARD 14)
+SET(CMAKE_CXX_STANDARD 17)
 
 enable_testing()
 
