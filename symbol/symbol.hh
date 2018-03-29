@@ -14,17 +14,18 @@ namespace iod
 }
 
 #define IOD_SYMBOL(NAME)                                                \
-struct _##NAME##_t : iod::symbol<_##NAME##_t> {                         \
+namespace s {                                                           \
+struct NAME##_t : iod::symbol<NAME##_t> {                         \
                                                                         \
-using assignable<_##NAME##_t>::operator=;                               \
+using assignable<NAME##_t>::operator=;                               \
                                                                         \
-inline constexpr bool operator==(_##NAME##_t) { return true; }          \
+inline constexpr bool operator==(NAME##_t) { return true; }          \
   template <typename T>                                                 \
   inline constexpr bool operator==(T) { return false; }                 \
                                                                         \
 template <typename V>                                                   \
   struct variable_t {                                                   \
-    typedef _##NAME##_t _iod_symbol_type;                            \
+    typedef NAME##_t _iod_symbol_type;                            \
     typedef V _iod_value_type;                                          \
     V NAME;                                                             \
   };                                                                   \
@@ -33,12 +34,14 @@ template <typename V>                                                   \
   static inline decltype(auto) symbol_method_call(T&& o, A... args) { return o.NAME(args...); } \
   template <typename T, typename... A>                                  \
   static inline auto& symbol_member_access(T&& o) { return o.NAME; } \
-  template <typename T>                                                 \
-  static constexpr auto has_member(T&& o) -> decltype(o.NAME, std::true_type{}) { return {}; } \
-  static constexpr std::false_type has_member(...) { return {}; }              \
-  template <typename T>                                                 \
-  static constexpr auto has_getter(T&& o) -> decltype(o.NAME(), std::true_type{}) { return {}; } \
-  static constexpr std::false_type has_getter(...) { return {}; }              \
+  template <typename T>                                                \
+  static constexpr auto has_getter(int) -> decltype(std::declval<T>().NAME(), std::true_type{}) { return {}; } \
+  template <typename T>                                                \
+  static constexpr auto has_getter(long) { return std::false_type{}; }     \
+  template <typename T>                                                \
+  static constexpr auto has_member(int) -> decltype(std::declval<T>().NAME, std::true_type{}) { return {}; } \
+  template <typename T>                                                \
+  static constexpr auto has_member(long) { return std::false_type{}; }        \
                                                                         \
   static inline auto symbol_string()                                    \
   {                                                                     \
@@ -46,8 +49,9 @@ template <typename V>                                                   \
   }                                                                     \
                                                                         \
 };                                                                      \
-static constexpr _##NAME##_t _##NAME;
-  
+static constexpr  NAME##_t NAME;                                    \
+}
+
 
 namespace iod
 {
@@ -86,30 +90,27 @@ namespace iod
   }
   
   template <typename T, typename S>
-  constexpr auto has_member(T&& o, S)
-  {
-    return decltype(S::has_member(o)){};
-  }
+  constexpr auto has_member(T&& o, S) { return S::template has_member<T>(0); }
+  template <typename T, typename S>
+  constexpr auto has_member() { return S::template has_member<T>(0); }
 
   template <typename T, typename S>
-  constexpr auto has_getter(T&& o, S)
-  {
-    return decltype(S::has_getter(o)){};
-  }
-
+  constexpr auto has_getter(T&& o, S) { return decltype(S::template has_getter<T>(0)){}; }
+  template <typename T, typename S>
+  constexpr auto has_getter() { return decltype(S::template has_getter<T>(0)){}; }
+  
   template <typename S, typename T>
   struct CANNOT_FIND_REQUESTED_MEMBER_IN_TYPE {};
   
   template <typename T, typename S>
   decltype(auto) symbol_member_or_getter_access(T&&o, S)
   {
-    if constexpr(has_getter(o, S{})) {
+    if constexpr(has_getter<T, S>()) {
         return symbol_method_call(o, S{});
       }
-    else if constexpr(has_member(o, S{}))
-    {
-      return symbol_member_access(o, S{});
-    }
+    else if constexpr(has_member<T, S>()) {
+        return symbol_member_access(o, S{});
+      }
     else
     {
       return CANNOT_FIND_REQUESTED_MEMBER_IN_TYPE<S, T>::error;
