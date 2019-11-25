@@ -3,8 +3,7 @@
 #include <utility>
 #include <vector>
 
-namespace iod
-{
+namespace iod { namespace symbol {
 
   template <typename E>
   struct Exp {};
@@ -160,4 +159,4 @@ namespace iod
   iod_query_declare_binary_op(&&, and);
   iod_query_declare_binary_op(||, or);
 
-}
+}}

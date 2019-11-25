@@ -6,6 +6,7 @@ SET(CMAKE_CXX_STANDARD 17)
 
 enable_testing()
 
+add_executable(iod_symbol_generator symbol/symbol_generator.cc)
 add_executable(test_symbol test.cc)
 add_test(test_symbol test_symbol)
 

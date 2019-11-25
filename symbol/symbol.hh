@@ -3,19 +3,19 @@
 #include <utility>
 #include <iod/symbol/ast.hh>
 
-namespace iod
-{
+namespace iod { namespace symbol {
+
   template <typename S>
   class symbol : public assignable<S>,
                  public array_subscriptable<S>,
                  public callable<S>,
                  public Exp<S>
   {};
-}
+}}
 
 #define IOD_SYMBOL(NAME)                                                \
 namespace s {                                                           \
-struct NAME##_t : iod::symbol<NAME##_t> {                         \
+struct NAME##_t : iod::symbol::symbol<NAME##_t> {                         \
                                                                         \
 using assignable<NAME##_t>::operator=;                               \
                                                                         \
@@ -53,8 +53,7 @@ static constexpr  NAME##_t NAME;                                    \
 }
 
 
-namespace iod
-{
+namespace iod { namespace symbol {
 
   template <typename S>
   inline decltype(auto) make_variable(S s, char const v[])
@@ -129,4 +128,5 @@ namespace iod
   {
     return V::_iod_symbol_type::symbol_string();
   }
-}
+}}
+
