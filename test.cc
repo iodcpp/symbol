@@ -4,9 +4,11 @@
 
 IOD_SYMBOL(my_symbol)
 
+using namespace iod;
+
 int main()
 {
-  using namespace iod::symbol;
+  
 
   // Simple variable.
   auto v = make_variable(s::my_symbol, 42);
